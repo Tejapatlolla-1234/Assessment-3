@@ -12,3 +12,4 @@ Part-1 Rscript
 Rstudio version Version 1.2.1335 and R version 3.6.3
 
 ## credits
+Tejaswini Reddy Patlolla

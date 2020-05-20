@@ -90,6 +90,35 @@ sd(SW$Circumf_2019_cm)
 
 # boxplot at the start and end of NE site
 
-boxplot(NE$Circumf_2004_cm , NE$Circumf_2019_cm, main = "Box plot of tree circumference at start and end of northeast site",
-        ylab = "Circumference")
+boxplot(NE$Circumf_2004_cm , NE$Circumf_2019_cm, main = "Box plot of tree circumference at northeast site",
+        ylab = "Circumference", names = c("NE_2004" , "NE_2019"))
 
+# boxplot at the start and end of SW site
+
+boxplot(SW$Circumf_2004_cm , SW$Circumf_2019_cm, main = "Box plot of tree circumference at southwest site",
+        ylab = "Circumference", names = c("SW_2004" , "SW_2019"))
+
+#Question 9 :- mean growth over the past 10 years at each site
+
+# mean growth at NE site
+
+NE$Circumf_2019_cm-NE$Circumf_2009_cm
+NE$growth<-NE$Circumf_2019_cm-NE$Circumf_2009_cm
+mean(NE$growth)
+head(NE)
+str(NE)
+
+# mean growth at SW site
+
+SW$Circumf_2019_cm-SW$Circumf_2009_cm
+SW$growth<-SW$Circumf_2019_cm-SW$Circumf_2009_cm
+mean(SW$growth)
+head(SW)
+str(SW)
+
+#Question 10 :- t.test and wilcox test to find p-value at both sites
+
+?t.test
+
+t.test(SW$growth , NE$growth)
+wilcox.test(SW$growth , NE$growth)

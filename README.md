@@ -1,5 +1,6 @@
 # Assessment-3
-Importing data from files gene_expression.tsv & growth_data.csv and executing codes, mathematical operations & plots.
+Part 1 - Importing data from files gene_expression.tsv & growth_data.csv and executing codes, mathematical operations & plots.
+Part 2 - downloaded E.coli sequence
 
 ## Motivation
 To give clear description about various data frames

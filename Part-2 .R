@@ -27,3 +27,4 @@ str(E.coli)
 
 #number of sequences in E.coli set
 seqinr::getLength(E.coli)
+

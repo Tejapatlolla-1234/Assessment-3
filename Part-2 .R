@@ -7,7 +7,7 @@ library("ORFik")
 library("Biostrings")
 source("https://raw.githubusercontent.com/markziemann/SLE712_files/master/bioinfo_asst3_part2_files/mutblast_functions.R")
 
-#Question 1 :- a) Download E.coli gene DNA sequence
+#Question 1 :- a) Downloading E.coli gene DNA sequence
 
 if ( ! file.exists("Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa") ) {
   download.file("ftp://ftp.ensemblgenomes.org/pub/bacteria/release-42/fasta/bacteria_0_collection/escherichia_coli_str_k_12_substr_mg1655/cds/Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa.gz",
@@ -43,16 +43,49 @@ str(mySeq)
 seqinr::getLength(mySeq)
 seqinr::GC(mySeq)
 
-# Question 3 :- a) Use blast to identify best match(BM) of  E.coli gene with my sequence (mySeq)
+# Question 3 :-  Use blast to identify best match(BM) of  E.coli gene with my sequence (mySeq)
 
 myblastn_tab(myseq = mySeq , db = "Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa")
 BM<-myblastn_tab(myseq = mySeq , db = "Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa")
 head(BM)
+View(head(BM))
 str(BM)
-hits <- as.character(BM[1:3]) 
+hits <- as.character(BM$sseqid[1:3]) 
 hits
+View(hits)
+
+# Question 4 :-  To check the number of mismatches between the original and mutated sequence
+ 
+mutator(mySeq,50)
+mySeq_mut <- mutator(mySeq,50)
+myblastn_tab(mySeq_mut , db="Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa")
+View (myblastn_tab(mySeq_mut , db="Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa"))
+
+# Question 5 :- 
+
+Result <- function(mySeq, nmut) {
+  mutSeq <- mutator(myseq = mySeq, nmut = nmut)
+  res <- myblastn_tab(myseq = mutSeq, db="Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa")
+if ( is.null(res) ) { 
+  myres=0 } else { myres=1 
+  }
+return(myres)
+}
+Result(mySeq,100)
+replicate(n=100, expr = Result(mySeq,100) )
+mean(replicate(n=100, expr = Result(mySeq,100) ))
+
+Result(mySeq,200)
+replicate(n=100, expr = Result(mySeq,200) )
+mean(replicate(n=100, expr = Result(mySeq,200) ))
+
+Result(mySeq,300)
+replicate(n=100, expr = Result(mySeq,300) )
+mean(replicate(n=100, expr = Result(mySeq,300) ))
 
 
-# Question 4 :-
+# Question 6 :- 
+
+boxplot(mean(replicate(n=100, expr = Result(mySeq,100) )))
 
 

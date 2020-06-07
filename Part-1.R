@@ -118,7 +118,5 @@ str(SW)
 
 #Question 10 :- t.test and wilcox test to find p-value at both sites
 
-?t.test
-
 t.test(SW$growth , NE$growth)
 wilcox.test(SW$growth , NE$growth)

@@ -1,0 +1,208 @@
+--- 
+title:   "Importing files, data wrangling, mathematical operations, plots" 
+author:  "Tejaswini Reddy Patlolla"
+output:  html_document 
+theme:   cosmo 
+---
+
+## 1) Downloading File and read into R
+Here we are using download.file() command to insert dataset and reading into Rscript. 
+By using head() command we can show table of values for first 6 genes and check the structure of imported data by str() command.
+
+```{r,mychunk1,echo=TRUE}
+
+#Question 1 :-  a) Downloading data in the file "gene_expression.tsv"
+
+download.file("https://raw.githubusercontent.com/markziemann/SLE712_files/master/bioinfo_asst3_part1_files/gene_expression.tsv",
+              destfile = "gene_expression.tsv")
+
+# b) read into R script , making sure gene accession numbers as the row names and headers are recognised
+
+GE<- read.table("gene_expression.tsv", header = TRUE, row.names = 1 , stringsAsFactors = FALSE )
+
+# checking imported data and data structure
+
+head(GE)
+str(GE)
+
+```
+
+## 2) making new column which is mean of other columns
+Here we use rowmean() command to calculate mean of other columns and make it as new column as GE$mean 
+By using head() command we can see first 6 lines of data frame
+
+```{r,mychunk2,echo=TRUE}
+#Question 2 :- making new column which is mean of other columns
+
+GE$mean<-rowMeans(GE)
+
+# checking data and data structure
+
+head(GE)
+str(GE)
+```
+
+## 3) 10 genes with highest mean expression
+we have obtained GE$mean as new column and we use order() command to arrange gene expression from high to low.
+head(,10)-this command gives first 10 genes with highest expression
+
+```{r,mychunk3,echo=TRUE}
+#Question 3 :- list of 10 genes with highest mean expression in order
+
+order(GE$mean)
+order(-GE$mean)
+ord<-GE[order(-GE$mean),]
+
+# checking data upto 10 genes
+
+head(ord,10)
+```
+
+## 4) To show number of genes with mean less than 10
+for this we use subset() command to determine number of genes
+
+```{r,mychunk4,echo=TRUE}
+#Question 4 :- subset of genes with mean less than 10
+
+subset(GE , mean<10)
+```
+
+## 5)To make histogram plot 
+here we use hist()command to amke histogram plot of the mean values and in the command we add title to the plot, colours to columns
+
+```{r,mychunk5,echo=TRUE}
+#Question 5 :- histogram of mean values
+
+hist(GE$mean)
+hist(GE$mean , main="Histogram plot of the mean values" , xlab = "Mean values" , border = "blue" , col = "orange")
+```
+
+## 6)Downloading File and read into R
+Here we are using download.file() command to insert dataset and reading into Rscript. 
+By using head() command we can show table of values for first 6 genes and check the structure of imported data by str() command.
+specify the column names by using colnames() command
+
+```{r,mychunk6,echo=TRUE}
+#Question 6 :- a)downloading growth_data.csv into R script
+
+download.file("https://raw.githubusercontent.com/markziemann/SLE712_files/master/bioinfo_asst3_part1_files/growth_data.csv" ,
+              destfile = "growth_data.csv")
+
+# b)read table treesgrowth (TG) into R script
+
+TG<- read.csv("growth_data.csv", sep = "," , header = TRUE,  stringsAsFactors = FALSE )
+
+# checking imported data and data structure
+
+head (TG)
+str(TG)
+
+# c)specifying column names of data treesgrowth
+
+colnames(TG)
+```
+
+## 7) calculation of mean and standrad deviation at both sites.
+Fisrtly, we subset northeast site using subset() command and save it as NE. Then we calculate mean and standard deviation at start and end of the northeast site. Similarily we follow same commands to calculate mean and standard deviation at southwest site.  
+
+```{r,mychunk7,echo=TRUE}
+#Question 7 :- Mean and standard deviation calculation of tree circumference (circumf) at start and end of the study both sites
+
+# subset of northeast (NE) Site in trees growth
+
+subset(TG , Site == "northeast")
+NE<-subset(TG , Site == "northeast")
+
+# checking imported data and data structure
+
+head(NE)
+str(NE)
+
+#mean and standard deviation calculation of  circumf at start of NE Site
+
+mean(NE$Circumf_2004_cm)
+sd(NE$Circumf_2004_cm)
+
+#mean and standard deviation calculation of  circumf at end of NE Site
+
+mean(NE$Circumf_2019_cm)
+sd(NE$Circumf_2019_cm)
+
+
+# subset of sowthwest (SW) Site in trees growth
+
+subset(TG , Site == "southwest")
+SW<-subset(TG , Site == "southwest")
+
+# checking imported data and data structure
+
+head(SW)
+str(SW)
+
+#mean and standard deviation calculation of  circumf at start of SW Site
+
+mean(SW$Circumf_2004_cm)
+sd(SW$Circumf_2004_cm)
+
+#mean and standard deviation calculation of  circumf at end of SW Site
+
+mean(SW$Circumf_2019_cm)
+sd(SW$Circumf_2019_cm)
+
+```
+
+## 8) To make box plot
+boxplot() command is used to make plot of tree circumference at start and end of the study at both sites. Here we seperately plot for northeast and southwest sites.
+
+```{r,mychunk8,echo=TRUE}
+#Question 8 :- boxplot of tree circumference at start and end of the study at both sites
+
+# boxplot at the start and end of NE site
+
+boxplot(NE$Circumf_2004_cm , NE$Circumf_2019_cm, main = "Box plot of tree circumference at northeast site",
+        ylab = "Circumference", names = c("NE_2004" , "NE_2019"))
+
+# boxplot at the start and end of SW site
+
+boxplot(SW$Circumf_2004_cm , SW$Circumf_2019_cm, main = "Box plot of tree circumference at southwest site",
+        ylab = "Circumference", names = c("SW_2004" , "SW_2019"))
+```
+
+## 9)calculate mean growth for past 10 years 
+In this we calculate mean groth for past years (2009-2019) at northeast  site and southwest site
+
+```{r,mychunk9,echo=TRUE}
+#Question 9 :- mean growth over the past 10 years at each site
+
+# mean growth at NE site
+
+NE$Circumf_2019_cm-NE$Circumf_2009_cm
+NE$growth<-NE$Circumf_2019_cm-NE$Circumf_2009_cm
+mean(NE$growth)
+
+# checking imported data and data structure
+
+head(NE)
+str(NE)
+
+# mean growth at SW site
+
+SW$Circumf_2019_cm-SW$Circumf_2009_cm
+SW$growth<-SW$Circumf_2019_cm-SW$Circumf_2009_cm
+mean(SW$growth)
+
+# checking imported data and data structure
+
+head(SW)
+str(SW)
+```
+
+## 10) Use the t.test and wilcox.test function
+using t.test() command and wilcox.test() command to estimate p values at both sites.
+
+```{r,mychunk10,echo=TRUE}
+#Question 10 :- t.test and wilcox test to find p-value at both sites
+
+t.test(SW$growth , NE$growth)
+wilcox.test(SW$growth , NE$growth)
+```

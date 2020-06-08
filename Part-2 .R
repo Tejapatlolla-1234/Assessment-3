@@ -68,21 +68,17 @@ if ( is.null(res) ) {
   }
 return(myres)
 }
-Result(mySeq,100)
-replicate(n=100, expr = Result(mySeq,100) )
-mean(replicate(n=100, expr = Result(mySeq,100) ))
+mean(replicate(n=100, expr = Result(mySeq,10) ))
+str(mean)
+finalres <- function (n){
+  mean(replicate(n , expr = Result(mySeq,10) ) )
+}
+n <- c(0,100,200,300,400)
+sapply(n, finalres)
+  
 
-Result(mySeq,200)
-replicate(n=100, expr = Result(mySeq,200) )
-mean(replicate(n=100, expr = Result(mySeq,200) ))
+# Question 6 
 
-Result(mySeq,300)
-replicate(n=100, expr = Result(mySeq,300) )
-mean(replicate(n=100, expr = Result(mySeq,300) ))
-
-
-# Question 6 :- 
-
-boxplot(mean(replicate(n=100, expr = Result(mySeq,100) )))
+plot(n,mean(replicate(n=100, expr = Result(mySeq,10) )))
 
 

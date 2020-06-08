@@ -48,18 +48,15 @@ seqinr::GC(mySeq)
 myblastn_tab(myseq = mySeq , db = "Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa")
 BM<-myblastn_tab(myseq = mySeq , db = "Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa")
 head(BM)
-View(head(BM))
 str(BM)
 hits <- as.character(BM$sseqid[1:3]) 
 hits
-View(hits)
 
 # Question 4 :-  To check the number of mismatches between the original and mutated sequence
  
 mutator(mySeq,50)
 mySeq_mut <- mutator(mySeq,50)
 myblastn_tab(mySeq_mut , db="Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa")
-View (myblastn_tab(mySeq_mut , db="Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa"))
 
 # Question 5 :- 
 

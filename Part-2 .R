@@ -53,7 +53,7 @@ hits <- as.character(BM$sseqid[1:3])
 hits
 
 # Question 4 :-  To check the number of mismatches between the original and mutated sequence
- 
+
 mutator(mySeq,50)
 mySeq_mut <- mutator(mySeq,50)
 myblastn_tab(mySeq_mut , db="Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa")
@@ -68,15 +68,15 @@ if ( is.null(res) ) {
   }
 return(myres)
 }
-mean(replicate(n=100, expr = Result(mySeq,10) ))
+replicate(n=100, expr = Result(mySeq,100) )
+mean(replicate(n=100, expr = Result(mySeq,100) ))
 str(mean)
 finalres <- function (n){
-  mean(replicate(n , expr = Result(mySeq,10) ) )
+  (replicate(n , expr = Result(mySeq,100) ) )
 }
 n <- c(0,100,200,300,400)
 sapply(n, finalres)
   
-
 # Question 6 
 
 plot(n,mean(replicate(n=100, expr = Result(mySeq,10) )))

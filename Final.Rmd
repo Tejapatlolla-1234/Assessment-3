@@ -1,0 +1,353 @@
+--- 
+title:   "Assessment 3" 
+author:  "Tejaswini Reddy Patlolla - 220047968"
+output:  html_document 
+theme:   cosmo 
+---
+
+unit chair : Mark ziemann
+
+unit : SLE712
+
+source : https://github.com/Tejapatlolla-1234/Assessment-3.git
+
+PART 1 
+
+gene_expression.tsv
+
+growth_data.csv
+
+boxplot and histogram- charts
+
+t.test and wilcox.test
+
+PART 2
+
+Libraries and sources
+
+E.coli gene sequence
+
+Blast function
+
+mutation function
+
+plot
+
+## Part -1 :  Importing files, data wrangling, mathematical operations, plots and saving code on GitHub 
+
+## 1) Downloading File and read into R
+Here we are using download.file() command to insert dataset and reading into Rscript. 
+By using head() command we can show table of values for first 6 genes and check the structure of imported data by str() command.
+
+```{r,mychunk1,echo=TRUE}
+
+#Question 1 :-  a) Downloading data in the file "gene_expression.tsv"
+
+download.file("https://raw.githubusercontent.com/markziemann/SLE712_files/master/bioinfo_asst3_part1_files/gene_expression.tsv",
+              destfile = "gene_expression.tsv")
+
+# b) read into R script , making sure gene accession numbers as the row names and headers are recognised
+
+GE<- read.table("gene_expression.tsv", header = TRUE, row.names = 1 , stringsAsFactors = FALSE )
+
+# checking imported data and data structure
+
+head(GE)
+str(GE)
+
+```
+
+## 2) making new column which is mean of other columns
+Here we use rowmean() command to calculate mean of other columns and make it as new column as GE$mean 
+By using head() command we can see first 6 lines of data frame
+
+```{r,mychunk2,echo=TRUE}
+#Question 2 :- making new column which is mean of other columns
+
+GE$mean<-rowMeans(GE)
+
+# checking data and data structure
+
+head(GE)
+str(GE)
+```
+
+## 3) 10 genes with highest mean expression
+we have obtained GE$mean as new column and we use order() command to arrange gene expression from high to low.
+head(,10)-this command gives first 10 genes with highest expression
+
+```{r,mychunk3,echo=TRUE}
+#Question 3 :- list of 10 genes with highest mean expression in order
+
+order(GE$mean)
+order(-GE$mean)
+ord<-GE[order(-GE$mean),]
+
+# checking data upto 10 genes
+
+head(ord,10)
+```
+
+## 4) To show number of genes with mean less than 10
+for this we use subset() command to determine number of genes
+
+```{r,mychunk4,echo=TRUE}
+#Question 4 :- subset of genes with mean less than 10
+
+subset(GE , mean<10)
+```
+
+## 5)To make histogram plot 
+here we use hist()command to amke histogram plot of the mean values and in the command we add title to the plot, colours to columns
+
+```{r,mychunk5,echo=TRUE}
+#Question 5 :- histogram of mean values
+
+hist(GE$mean)
+hist(GE$mean , main="Histogram plot of the mean values" , xlab = "Mean values" , border = "blue" , col = "orange")
+```
+
+## 6)Downloading File and read into R
+Here we are using download.file() command to insert dataset and reading into Rscript. 
+By using head() command we can show table of values for first 6 genes and check the structure of imported data by str() command.
+specify the column names by using colnames() command
+
+```{r,mychunk6,echo=TRUE}
+#Question 6 :- a)downloading growth_data.csv into R script
+
+download.file("https://raw.githubusercontent.com/markziemann/SLE712_files/master/bioinfo_asst3_part1_files/growth_data.csv" ,
+              destfile = "growth_data.csv")
+
+# b)read table treesgrowth (TG) into R script
+
+TG<- read.csv("growth_data.csv", sep = "," , header = TRUE,  stringsAsFactors = FALSE )
+
+# checking imported data and data structure
+
+head (TG)
+str(TG)
+
+# c)specifying column names of data treesgrowth
+
+colnames(TG)
+```
+
+## 7) calculation of mean and standrad deviation at both sites.
+Fisrtly, we subset northeast site using subset() command and save it as NE. Then we calculate mean and standard deviation at start and end of the northeast site. Similarily we follow same commands to calculate mean and standard deviation at southwest site and save it as SW.  
+
+```{r,mychunk7,echo=TRUE}
+#Question 7 :- Mean and standard deviation calculation of tree circumference (circumf) at start and end of the study both sites
+
+# subset of northeast (NE) Site in trees growth
+
+subset(TG , Site == "northeast")
+NE<-subset(TG , Site == "northeast")
+
+# checking imported data and data structure
+
+head(NE)
+str(NE)
+
+#mean and standard deviation calculation of  circumf at start of NE Site
+
+mean(NE$Circumf_2004_cm)
+sd(NE$Circumf_2004_cm)
+
+#mean and standard deviation calculation of  circumf at end of NE Site
+
+mean(NE$Circumf_2019_cm)
+sd(NE$Circumf_2019_cm)
+
+
+# subset of sowthwest (SW) Site in trees growth
+
+subset(TG , Site == "southwest")
+SW<-subset(TG , Site == "southwest")
+
+# checking imported data and data structure
+
+head(SW)
+str(SW)
+
+#mean and standard deviation calculation of  circumf at start of SW Site
+
+mean(SW$Circumf_2004_cm)
+sd(SW$Circumf_2004_cm)
+
+#mean and standard deviation calculation of  circumf at end of SW Site
+
+mean(SW$Circumf_2019_cm)
+sd(SW$Circumf_2019_cm)
+
+```
+
+## 8) To make box plot
+boxplot() command is used to make plot of tree circumference at start and end of the study at both sites. Here we seperately plot for northeast and southwest sites.
+
+```{r,mychunk8,echo=TRUE}
+#Question 8 :- boxplot of tree circumference at start and end of the study at both sites
+
+# boxplot at the start and end of NE site
+
+boxplot(NE$Circumf_2004_cm , NE$Circumf_2019_cm, main = "Box plot of tree circumference at northeast site",
+        ylab = "Circumference", names = c("NE_2004" , "NE_2019"))
+
+# boxplot at the start and end of SW site
+
+boxplot(SW$Circumf_2004_cm , SW$Circumf_2019_cm, main = "Box plot of tree circumference at southwest site",
+        ylab = "Circumference", names = c("SW_2004" , "SW_2019"))
+```
+
+## 9)calculate mean growth for past 10 years 
+In this we calculate mean groth for past years (2009-2019) at northeast  site and southwest site
+
+```{r,mychunk9,echo=TRUE}
+#Question 9 :- mean growth over the past 10 years at each site
+
+# mean growth at NE site
+
+NE$Circumf_2019_cm-NE$Circumf_2009_cm
+NE$growth<-NE$Circumf_2019_cm-NE$Circumf_2009_cm
+mean(NE$growth)
+
+# checking imported data and data structure
+
+head(NE)
+str(NE)
+
+# mean growth at SW site
+
+SW$Circumf_2019_cm-SW$Circumf_2009_cm
+SW$growth<-SW$Circumf_2019_cm-SW$Circumf_2009_cm
+mean(SW$growth)
+
+# checking imported data and data structure
+
+head(SW)
+str(SW)
+```
+
+## 10) Use the t.test and wilcox.test function
+using t.test() command and wilcox.test() command to estimate p values at both sites.
+
+```{r,mychunk10,echo=TRUE}
+#Question 10 :- t.test and wilcox test to find p-value at both sites
+
+t.test(SW$growth , NE$growth)
+wilcox.test(SW$growth , NE$growth)
+```
+
+## Part -2 : Determine the limits of BLAST
+
+## Libraries and sources
+## There are some packages that we will need  before starting blast. 'seqinr' is a package designed to process and analyse sequence data. 'R.utils' provides the ability to extract compressed files. We will need an R interface to run BLAST searches called 'rBLAST'. 'ape' provides clustal alignment capability and adegenet converts sequence data between major formats. We “source” file to run mutator functions .
+
+```{r,mychunk11,echo=TRUE}
+
+
+library("seqinr")
+library("R.utils")
+library("rBLAST")
+library("ape")
+library("ORFik")
+library("Biostrings")
+source("https://raw.githubusercontent.com/markziemann/SLE712_files/master/bioinfo_asst3_part2_files/mutblast_functions.R")
+```
+
+## 1) First we download whole set of E.coli gene DNA sequence. The downloaded file is in Zip format so , decompress the file for further use. The we use makeblastdb() command to create a balst data base and this gives number of sequences in E.coli set.
+
+```{r,mychunk12,echo=TRUE}
+#Question 1 :- a) Downloading E.coli gene DNA sequence
+
+download.file("ftp://ftp.ensemblgenomes.org/pub/bacteria/release-42/fasta/bacteria_0_collection/escherichia_coli_str_k_12_substr_mg1655/cds/Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa.gz",
+              destfile = "Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa.gz")
+
+# b) decompress the file
+
+R.utils::gunzip("Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa.gz" , overwrite=TRUE)
+
+
+# c) creating blast database
+
+makeblastdb("Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa" , dbtype= "nucl" ,  "-parse_seqids")
+
+#number of sequences in E.coli set - 4140
+```
+
+## 2) simple fasta seqeunce is downloaded. simple fasta is the common format for DNA / RNA sequences. From this sequences allocate seqeunce of mine is extracted and structure is checked.
+
+```{r,mychunk13,echo=TRUE}
+#Question 2:- a) downloading sample fasta sequence
+
+download.file("https://raw.githubusercontent.com/markziemann/SLE712_files/master/bioinfo_asst3_part2_files/sample.fa" ,
+              destfile = "sample.fa")
+SEQ<-read.fasta("sample.fa")
+str(SEQ)
+
+# b) Extracting allocated sequence from above sample
+
+mySeq <- SEQ[[73]]
+str(mySeq)
+
+# c) length and proportion of GC bases
+
+seqinr::getLength(mySeq)
+seqinr::GC(mySeq)
+```
+
+## 3) we use blast command to identift bestmatch for my sequence in the C.coli gene seqeunce. head () and str () commands are used to check the imported data and structute of data. hits() command gives us table of top 3 hits.
+
+```{r,mychunk14,echo=TRUE}
+# Question 3 :-  Use blast to identify best match(BM) of  E.coli gene with my sequence (mySeq)
+
+myblastn_tab(myseq = mySeq , db = "Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa")
+BM<-myblastn_tab(myseq = mySeq , db = "Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa")
+head(BM)
+str(BM)
+hits <- as.character(BM$sseqid[1:3]) 
+hits
+```
+
+## 4) R code is executed to check the number of mismatches between the original and mutated seqeunce.
+
+```{r,mychunk15,echo=TRUE}
+# Question 4 :-  To check the number of mismatches 
+
+mutator(mySeq,50)
+mySeq_mut <- mutator(mySeq,50)
+myblastn_tab(mySeq_mut , db="Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa")
+```
+
+## 5) first we create function Result that create mutations and balst database. We use conditinals ( if / else commands) to return the required answer. replicate () command is used to repeat a task a set number of times. 
+
+```{r,mychunk16,echo=TRUE}
+# Question 5 :- 
+
+Result <- function(mySeq, nmut) {
+  mutSeq <- mutator(myseq = mySeq, nmut = nmut)
+  res <- myblastn_tab(myseq = mutSeq, db="Escherichia_coli_str_k_12_substr_mg1655.ASM584v2.cds.all.fa")
+  if ( is.null(res) ) { 
+    myres=0 } else { myres=1 
+    }
+  return(myres)
+}
+replicate(n=100, expr = Result(mySeq,100) )
+mean(replicate(n=100, expr = Result(mySeq,100) ))
+str(mean)
+finalres <- function (n){
+  mean(replicate(n , expr = Result(mySeq,100) ) )
+}
+n <- c(10,50,100,150,200,250,300,350,400)
+END<-sapply(n, finalres)
+END
+```
+
+## 6) plot () command is used to generate chart that shows how the increasing proportion of mutated bases reduces the ability for BLAST to match the gene of origin.  
+
+```{r,mychunk17,echo=TRUE}
+# Question 6 
+
+plot(n , END , xlab = "number of sites", ylab = "proportion of mutated bases", 
+     main = " How the increasing proportion of mutated bases reduces the ability for BLAST" , type = "o", col = "orange")
+```
+

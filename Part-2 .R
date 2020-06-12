@@ -72,13 +72,16 @@ replicate(n=100, expr = Result(mySeq,100) )
 mean(replicate(n=100, expr = Result(mySeq,100) ))
 str(mean)
 finalres <- function (n){
-  (replicate(n , expr = Result(mySeq,100) ) )
+  mean(replicate(n , expr = Result(mySeq,100) ) )
 }
-n <- c(0,100,200,300,400)
-sapply(n, finalres)
-  
+n <- c(10,50,100,150,200,250,300,350,400)
+END<-sapply(n, finalres)
+END
+
+
 # Question 6 
 
-plot(n,mean(replicate(n=100, expr = Result(mySeq,10) )))
+plot(n , END , xlab = "number of sites", ylab = "proportion of mutated bases", 
+     main = " How the increasing proportion of mutated bases reduces the ability for BLAST" , type = "o", col = "orange")
 
 
